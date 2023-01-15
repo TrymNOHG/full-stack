@@ -1,0 +1,36 @@
+/* Table */
+
+.table {
+}
+
+thead th {
+
+}
+
+tr {
+
+}
+
+table, th, td {
+    border: 1px solid black;
+    font-family: Braggadocio, serif;
+    text-align: center;
+}
+
+/* List */
+/*ul {*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*}*/
+
+/*li {*/
+/*    color: #FFF;*/
+/*    display: inline-block;*/
+/*    font-family: 'Oxygen', sans-serif;*/
+/*    font-size: 16px;*/
+/*    font-weight: 300;*/
+/*    letter-spacing: 2px;*/
+/*    margin: 0;*/
+/*    padding: 20px 18px 10px 18px;*/
+/*    text-transform: uppercase;*/
+/*}*/

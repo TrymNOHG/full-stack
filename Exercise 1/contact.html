@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trympedia Contact</title>
+</head>
+  <body>
+
+  <menu>
+    <h1>Trympedia <a href="/index.html">Home</a> <a href="/contact.html">Contact</a> <a href="/sign-in.html">Sign in</a></h1>
+  </menu>
+
+  <h1>Contact me</h1>
+  <p>
+    If you have would like to contact me regarding new information, enter your
+    email below as well as what the information concerns.
+  </p>
+
+  <form action="/index.html" method="POST">
+    <label for="email">Enter Email</label>
+    <br>
+     <input type="email" name="email" value="" id="email" required pattern="^[\w]+(?:\.[\w]+)*@[\w]+(?:\.[\w]+)*$">
+    <br>
+    <label for="concern">Concern</label>
+    <br>
+    <input type="text" list="questions" id="concern" name="concern" required>
+    <datalist id="questions">
+      <option>Misinformation</option>
+      <option>Job opening</option>
+      <option>Praise</option>
+    </datalist>
+    <br>
+    <label for="desc">Description of concern</label>
+    <br>
+    <textarea name="Description" id="desc" rows="5" cols="30"> </textarea>
+    <br>
+    <label for="send"></label>
+    <input type="submit" name="Send" value="Send" id="send">
+    <br>
+  </form>
+
+  </body>
+</html>
