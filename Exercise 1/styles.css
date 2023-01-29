@@ -1,36 +1,127 @@
-/* Table */
+@media (min-width: 481px){  /* Defines the style for pc/tablet */
+    * {
+        box-sizing: border-box;
+        font-family: sans-serif;
+        margin: 0 25px;
+    }
 
-.table {
+    body {
+        background: url("https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.photos-public-domain.com%2Fwp-content%2Fuploads%2F2013%2F01%2Fwhite-abstract-pattern-laminate-counterop-texture.jpg&f=1&nofb=1&ipt=61d836eb303a22c6f77d9fc9411cc6e89eb41ed897de2a4a8bd08efa8cdd8987&ipo=images");
+        display: grid;
+    }
+
+    /* Grid Layout */
+
+    .box {
+
+    }
+
+    .box-intro {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 70% 30%;
+    }
+
+    .contents, .box-intro.summary {
+        display: grid;
+        grid-template-rows: 200px 100px;
+        margin: 20px;
+    }
+
+    .contents {
+        width: 240px;
+        border: black solid;
+    }
+
+    .contents li {
+        margin: 0;
+        left: 0;
+    }
+
+    /* Links */
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Navigation bar*/
+    header {
+        background-color: teal;
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    nav {
+        margin: 0 auto;
+    }
+
+    nav li {
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+        color: white;
+        text-align: center;
+        left: 0;
+    }
+
+
+    nav li a:hover {
+        background-color: darkslategrey;
+    }
+
+    /* Main */
+
+    main {
+        position: relative;
+        top: 90px;
+    }
+
+    /* Lists */
+
+    /* Table */
+
+    .table {
+    }
+
+    thead th {
+
+    }
+
+    tr {
+
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        font-family: sans-serif, serif;
+        text-align: center;
+        padding: 10px 10px;
+    }
+
+    /* Captions */
+
+    figcaption {
+        font-size: 10px;
+    }
+
+    section {
+        margin: 30px auto;
+    }
+
+    footer {
+        position: relative;
+        top: 90px;
+    }
+
+    #requirements {
+        visibility: hidden;
+    }
+
+
 }
-
-thead th {
-
-}
-
-tr {
-
-}
-
-table, th, td {
-    border: 1px solid black;
-    font-family: Braggadocio, serif;
-    text-align: center;
-}
-
-/* List */
-/*ul {*/
-/*    padding: 0;*/
-/*    margin: 0;*/
-/*}*/
-
-/*li {*/
-/*    color: #FFF;*/
-/*    display: inline-block;*/
-/*    font-family: 'Oxygen', sans-serif;*/
-/*    font-size: 16px;*/
-/*    font-weight: 300;*/
-/*    letter-spacing: 2px;*/
-/*    margin: 0;*/
-/*    padding: 20px 18px 10px 18px;*/
-/*    text-transform: uppercase;*/
-/*}*/

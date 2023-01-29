@@ -3,25 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign-in Trympedia</title>
+    <link rel="stylesheet" href="styles.css">
+  <script src="web_app.js" defer></script>
 </head>
 <body>
 
-<div>
-  <menu>
-    <h1>Trympedia <a href="/index.html">Home</a> <a href="/contact.html">Contact</a> <a href="/sign-in.html">Sign in</a></h1>
-  </menu>
-</div>
+<!--Menu bar-->
+<header class="box nav">
+  <nav>
+    <ul>
+      <li><img src="/images/wiki-logo" alt="Wikipedia logo" height="50" width="50"></li>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/sign-in.html">Sign in</a></li>
+    </ul>
+  </nav>
+</header>
 
-<form action="web_app.js" method="POST">
-  <label for="username">Username</label>
-  <input type="text" name="name" id="username" minlength="5" maxlength="20" required>
-  <br>
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" required>
-  <br>
-  <label for="login"></label>
-  <input type="button" name="Log-in" value = "Login" id="login">
-</form>
+<main>
+  <form action="web_app.js" method="POST">
+    <label for="username">Username</label>
+    <input type="text" name="name" id="username" minlength="5" maxlength="20" required>
+    <br>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    <br>
+    <label for="login"></label>
+    <input type="button" name="Log-in" value= "Login" id="login" onclick="attemptLogin()">
+  </form>
+  <section id="requirements">
+    <section class="inc-button">
+      <input type="button" value="Increment Counter" onclick="incrementValue()">
+      <p>Value : <span id="num-value">0</span></p>
+    </section>
+
+    <section class="hide-button">
+      <input type="button" value="Hide text" onclick="hideText()" id="hide-button">
+      <p id="hidden-text">This is a secret message!</p>
+    </section>
+
+    <section class="rand-words">
+      <input type="button" value="Generate Random Word List" onclick="generateRandomList()">
+      <ul>
+        <li id="word1"></li>
+        <li id="word2"></li>
+        <li id="word3"></li>
+      </ul>
+    </section>
+  </section>
+</main>
+
+
+
+
+
+
+
+
 
 </body>
 </html>
