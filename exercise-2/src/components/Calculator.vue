@@ -1,24 +1,10 @@
 <template>
   <div class="calculator">
-    <div class="screen"> {{ display_input }} </div>
-    <div class="buttons" v-on:click="print">
+    <div class="screen"> {{ this.calculation }} </div>
+    <div class="buttons">
 <!--      Maybe add clear or back button?-->
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>/</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>x</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>-</button>
-      <button>0</button>
-      <button>.</button>
-      <button>ans</button>
-      <button>+</button>
+      <button v-for="button in buttons" @click="add_input(button)">{{ button }}</button>
+      <button @click="calculate">Enter</button>
     </div>
 
   </div>
@@ -41,12 +27,67 @@ export default {
   },
   data() {
     return {
+      buttons: [7, 8, 9, "/", 4, 5, 6, "x", 1, 2, 3, "-", 0, ".", "ans", "+", "del", "ac", "c"],
       //Stack of operators
       input: [],
-      result: null
+      currentNumber: null,
+      result: null,
+      float: 1
     } // An object holding the list of operations as well as the result.
   },
   methods: {
+    add_input(value) {
+      let operators = {'x' : this.multiply, '+' : this.add, '-': this.subtract, '/': this.divide}
+      switch (value) {
+        case 'ans':
+          if (this.result !== null && typeof this.input[this.input.length - 1] !== "number") {
+            this.input.push(this.result)
+          } else {
+            alert("Invalid use of ans button!")
+          }
+          break;
+        case '.':
+          let currentVal = this.input.pop()
+          this.float *= 10;
+          this.input.push(currentVal * 1.0)
+          break;
+        case 'del':
+          this.input.pop();
+          break;
+        case 'c':
+          break;
+        case 'ac':
+          this.input = []
+          break;
+        default:
+          if (operators[value] !== undefined){
+            if (this.input.length === 0) {
+              if (this.result === null) {
+                alert("Invalid")
+              } else {
+                this.input.push(this.result);
+              }
+            }
+            this.input.push(value)
+            this.currentNumber = null
+            this.float = 1
+          } else if (typeof value === "number"){
+            if(this.currentNumber !== null) this.input.pop()
+            if(this.float === 1) {
+              this.currentNumber = this.currentNumber * 10 + value;
+            } else {
+              this.currentNumber += value/this.float;
+              this.float *= 10;
+            }
+            this.input.push(this.currentNumber)
+          } else {
+            alert("Something went wrong")
+          }
+      }
+      console.log(this.input)
+      console.log(this.currentNumber)
+
+    },
     multiply (number1, number2) {
       return number1 * number2
     },
@@ -62,16 +103,19 @@ export default {
       }
       return number1/number2;
     },
+    //This method uses the Reverse Polish Notation in order to perform the necessary operations.
     calculate() {
       let operators = {'x' : this.multiply, '+' : this.add, '-': this.subtract, '/': this.divide}
       let initVal = 0
       // Calculation operations
       //If invalid calculation (ends with operation symbol), alert(...);
-      for (let i = 0; i < this.input.length/3; i++) {
-        let num1 = this.input[i];
-        let num2 = this.input[i + 1];
-        let operator = this.input[i + 2];
+      let num1 = this.input[0];
+      for (let i = 0; i < this.input.length/2; i+=2) {
+        let num2 = this.input[i + 2];
+        let operator = this.input[i + 1];
+        console.log(operator)
         initVal += operators[operator](num1, num2);
+        num1 = initVal
       }
       this.result = initVal;
 
@@ -80,24 +124,18 @@ export default {
         result: this.result
       }
 
+      console.log(this.result);
+
       this.$emit('', entry)
 
       this.input = []
-      this.display_input = ''
-    },
-    print() {
-      console.log("ok")
+      this.currentNumber = null
     }
   },
   computed: {
     calculation() {
       let calc = "";
-      for (let i = 0; i < this.input.length/3; i++) {
-        let num1 = this.input[i];
-        let num2 = this.input[i + 1];
-        let operator = this.input[i + 2];
-        calc += [num1, operator, num2].join(" ");
-      }
+      this.input.forEach(symbol => calc += symbol + " ");
       return calc
     }
   }

@@ -4,12 +4,12 @@ import Calculator from './components/Calculator.vue'
 
 <template>
   <header>
-    <div class="wrapper">
-      <Calculator  msg=""/>
-    </div>
   </header>
 
   <main>
+    <div class="wrapper">
+      <Calculator  msg=""/>
+    </div>
   </main>
 </template>
 
