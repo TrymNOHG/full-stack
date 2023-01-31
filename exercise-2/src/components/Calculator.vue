@@ -19,11 +19,6 @@
 <script>
 export default {
   props: {
-    entry: {
-      type: Number, //Previous answer (if needed). This is pulled from the last log entry.
-      //Might not need to fetch data from log if I just store the result.
-      required: true
-    }
   },
   data() {
     return {
@@ -126,7 +121,7 @@ export default {
 
       console.log(this.result);
 
-      this.$emit('', entry)
+      this.$emit('completed-entry', entry)
 
       this.input = []
       this.currentNumber = null
