@@ -19,6 +19,14 @@ export default {
     return {
       pastEntries: []
     }
+  },
+  methods: {
+    addEntry(entry){
+      this.pastEntries.push(entry)
+    },
+    clearAll() {
+      this.pastEntries = []
+    }
   }
 }
 </script>

@@ -1,27 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import CalcPage from "@/views/CalcPage.vue";
+import CalcPage from '@/views/CalcPage.vue'
 
 const routes = [
-    {
-        path: '/',
-        name: 'Calculator',
-        component: CalcPage
-    },
-    // {
-    //     path: '/event/:id',
-    //     name: 'EventDetails',
-    //     component: EventDetails
-    // },
-    // {
-    //     path: '/about',
-    //     name: 'About',
-    //     component: About
-    // }
+  {
+    path: '/',
+    name: 'Calculator',
+    component: CalcPage
+  },
+  {
+
+  }
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
-    routes
+  history: createWebHistory(process.env.BASE_URL),
+  routes
 })
 
 export default router

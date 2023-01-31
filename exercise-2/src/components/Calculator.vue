@@ -53,6 +53,7 @@ export default {
           break;
         case 'ac':
           this.input = []
+          this.currentNumber = null
           break;
         default:
           if (operators[value] !== undefined){
@@ -128,7 +129,7 @@ export default {
     }
   },
   computed: {
-    calculation() {
+    calculation() { //TODO: This could be refactored so that a variable calc is saved in data and changed in methods.
       let calc = "";
       this.input.forEach(symbol => calc += symbol + " ");
       return calc
@@ -169,6 +170,9 @@ button:hover {
   background-color: white;
   color: black;
   border-radius: 10%;
+  text-align: left;
+  padding-top: 15px;
+  text-indent: 25px;
 }
 h1 {
   font-weight: 500;
