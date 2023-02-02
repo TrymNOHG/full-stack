@@ -4,15 +4,9 @@
     <div class="buttons">
 <!--      Maybe add clear or back button?-->
       <button v-for="button in buttons" @click="add_input(button)">{{ button }}</button>
-      <button @click="calculate">Enter</button>
+      <button @click="calculate" class="enterButton">Enter</button>
     </div>
 
-  </div>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-
-    </h3>
   </div>
 </template>
 
@@ -25,63 +19,46 @@ export default {
       buttons: [7, 8, 9, "/", 4, 5, 6, "x", 1, 2, 3, "-", 0, ".", "ans", "+", "del", "ac", "c"],
       //Stack of operators
       input: [],
-      currentNumber: null,
       result: null,
-      float: 1
+      operators: {'x' : this.multiply, '+' : this.add, '-': this.subtract, '/': this.divide}
     } // An object holding the list of operations as well as the result.
   },
   methods: {
     add_input(value) {
-      let operators = {'x' : this.multiply, '+' : this.add, '-': this.subtract, '/': this.divide}
-      switch (value) {
-        case 'ans':
-          if (this.result !== null && typeof this.input[this.input.length - 1] !== "number") {
-            this.input.push(this.result)
-          } else {
-            alert("Invalid use of ans button!")
-          }
-          break;
-        case '.':
-          let currentVal = this.input.pop()
-          this.float *= 10;
-          this.input.push(currentVal * 1.0)
-          break;
-        case 'del':
-          this.input.pop();
-          break;
-        case 'c':
-          break;
-        case 'ac':
-          this.input = []
-          this.currentNumber = null
-          break;
-        default:
-          if (operators[value] !== undefined){
-            if (this.input.length === 0) {
-              if (this.result === null) {
-                alert("Invalid")
-              } else {
-                this.input.push(this.result);
-              }
-            }
-            this.input.push(value)
-            this.currentNumber = null
-            this.float = 1
-          } else if (typeof value === "number"){
-            if(this.currentNumber !== null) this.input.pop()
-            if(this.float === 1) {
-              this.currentNumber = this.currentNumber * 10 + value;
-            } else {
-              this.currentNumber += value/this.float;
-              this.float *= 10;
-            }
-            this.input.push(this.currentNumber)
-          } else {
-            alert("Something went wrong")
-          }
+      if (typeof value === 'number' &&
+          (this.input.length === 0 || this.operators[this.input[this.input.length - 1]] !== undefined)) {
+        this.input.push(value)
       }
-      console.log(this.input)
-      console.log(this.currentNumber)
+      else if (this.operators[value] !== undefined) this.input.push(value)
+      else if (typeof value === 'string') {
+        switch (value) {
+          case 'ans':
+            if (this.result !== null &&
+                (this.operators[this.input[this.input.length - 1]] !== undefined || this.input.length === 0)) {
+              this.input.push(this.result)
+            }
+            else alert("Invalid use of ans button!")
+            break;
+          case '.':
+            if (String(this.input[this.input.length - 1]).indexOf(value) !== -1) alert("Invalid operation")
+            else this.input[this.input.length - 1] += '.'
+            break;
+          case 'del':
+            let lastIndex = this.input.length - 1
+            if (this.input[lastIndex].length === 1) this.input.pop()
+            else this.input[lastIndex] = this.input[lastIndex].substring(0, this.input[lastIndex].length - 1)
+            break;
+          case 'c':
+            this.input = []
+            break;
+          case 'ac':
+            this.input = []
+            this.result = null
+            this.$store.commit('clearAll')
+            break;
+        }
+      }
+      else this.input[this.input.length - 1] += String(value)
 
     },
     multiply (number1, number2) {
@@ -99,19 +76,22 @@ export default {
       }
       return number1/number2;
     },
-    //This method uses the Reverse Polish Notation in order to perform the necessary operations.
+    //This method could use the Reverse Polish Notation in order to perform the necessary operations.
     calculate() {
-      let operators = {'x' : this.multiply, '+' : this.add, '-': this.subtract, '/': this.divide}
+      if (this.operators[this.input[this.input.length - 1]] !== undefined || this.input.length < 3) {
+        alert("Invalid Calculation")
+        return
+      }
+
       let initVal = 0
       // Calculation operations
-      //If invalid calculation (ends with operation symbol), alert(...);
-      let num1 = this.input[0];
+      let num1 = Number(this.input[0]);
       for (let i = 0; i < this.input.length/2; i+=2) {
-        let num2 = this.input[i + 2];
+        let num2 = Number(this.input[i + 2]);
         let operator = this.input[i + 1];
-        console.log(operator)
-        initVal += operators[operator](num1, num2);
+        initVal = this.operators[operator](num1, num2);
         num1 = initVal
+        console.log(initVal)
       }
       this.result = initVal;
 
@@ -120,16 +100,15 @@ export default {
         result: this.result
       }
 
-      console.log(this.result);
-
-      this.$emit('completed-entry', entry)
+      // this.$emit('completed-entry', entry)
+      // this.$store.dispatch('addEntry', entry)
+      this.$store.commit('addEntry', entry)
 
       this.input = []
-      this.currentNumber = null
     }
   },
   computed: {
-    calculation() { //TODO: This could be refactored so that a variable calc is saved in data and changed in methods.
+    calculation() {
       let calc = "";
       this.input.forEach(symbol => calc += symbol + " ");
       return calc
@@ -147,11 +126,12 @@ export default {
   background-color: gray;
   padding: 10px 10px;
   border-radius: 5%;
+  max-width: 300px;
 }
 .buttons {
   display: grid;
-  grid-template: 1fr 1fr 1fr 1fr / 1fr 1fr 1fr 1fr;
-  gap: 10px 10px;
+  grid-template: 1fr 1fr 1fr 1fr 1fr/ 1fr 1fr 1fr 1fr;
+  gap: 5px 5px;
 }
 
 button {
@@ -162,6 +142,11 @@ button:hover {
   cursor: pointer;
   box-shadow: 0 0.5em 0.5em -0.4em;
   transform: translateY(-0.10em);
+}
+
+.enterButton {
+  color: black;
+  background-color: rgba(139, 81, 10, 0.85);
 }
 
 .calculator .screen {
@@ -190,9 +175,5 @@ h3 {
 }
 
 @media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
 }
 </style>

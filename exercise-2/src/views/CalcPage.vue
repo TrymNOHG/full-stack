@@ -13,8 +13,8 @@ export default {
 
 <template>
   <div class="splitCalc">
-    <Calculator  msg=""/>
-    <Log entry=""/>
+    <Calculator/>
+    <Log/>
   </div>
 </template>
 

@@ -8,7 +8,9 @@ const routes = [
     component: CalcPage
   },
   {
-
+    // path: '/',
+    // name: 'Contact',
+    // component:
   }
 ]
 

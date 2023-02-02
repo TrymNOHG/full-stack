@@ -1,40 +1,38 @@
 <template>
 <!--  Scrollable log where last operation goes to the bottom.-->
-  <div>
-    <p v-for="pastEntry in pastEntries">{{ pastEntry }}</p>
+  <div class="log">
+    <p>Log</p>
+    <textarea disabled>{{ this.updateEntries }}</textarea>
   </div>
 </template>
 
 <script>
 export default {
   name: "Log",
-  props: {
-    entry: {
-      type: Object, //Previous answer (if needed). This is pulled from the last log entry.
-      //Might not need to fetch data from log if I just store the result.
-      required: true
-    }
-  },
   data() {
     return {
       pastEntries: []
     }
   },
   methods: {
-    addEntry(entry){
-      this.pastEntries.push(entry)
-    },
-    clearAll() {
-      this.pastEntries = []
+
+  },
+  computed: {
+    updateEntries(){
+      let calc = "";
+      let pastEntries = this.$store.state.logs.logEntries
+      pastEntries.forEach(symbol => calc += symbol.input + " = " + symbol.result + "\n");
+      return calc
     }
   }
 }
 </script>
 
 <style scoped>
-  p {
+  textarea {
     background-color: white;
     height: 300px;
     overflow: scroll;
+    resize: none;
   }
 </style>
