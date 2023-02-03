@@ -7,6 +7,9 @@
 </template>
 
 <style>
+html {
+  background-color: #2b2e4a;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -21,10 +24,10 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #903749;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #e84545;
 }
 </style>

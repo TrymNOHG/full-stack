@@ -35,4 +35,7 @@ export default {
     overflow: scroll;
     resize: none;
   }
+  p {
+    color: #96a1ff;
+  }
 </style>

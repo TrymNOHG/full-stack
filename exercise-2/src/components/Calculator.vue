@@ -6,7 +6,6 @@
       <button v-for="button in buttons" @click="add_input(button)">{{ button }}</button>
       <button @click="calculate" class="enterButton">Enter</button>
     </div>
-
   </div>
 </template>
 
@@ -25,41 +24,10 @@ export default {
   },
   methods: {
     add_input(value) {
-      if (typeof value === 'number' &&
-          (this.input.length === 0 || this.operators[this.input[this.input.length - 1]] !== undefined)) {
-        this.input.push(value)
-      }
-      else if (this.operators[value] !== undefined) this.input.push(value)
-      else if (typeof value === 'string') {
-        switch (value) {
-          case 'ans':
-            if (this.result !== null &&
-                (this.operators[this.input[this.input.length - 1]] !== undefined || this.input.length === 0)) {
-              this.input.push(this.result)
-            }
-            else alert("Invalid use of ans button!")
-            break;
-          case '.':
-            if (String(this.input[this.input.length - 1]).indexOf(value) !== -1) alert("Invalid operation")
-            else this.input[this.input.length - 1] += '.'
-            break;
-          case 'del':
-            let lastIndex = this.input.length - 1
-            if (this.input[lastIndex].length === 1) this.input.pop()
-            else this.input[lastIndex] = this.input[lastIndex].substring(0, this.input[lastIndex].length - 1)
-            break;
-          case 'c':
-            this.input = []
-            break;
-          case 'ac':
-            this.input = []
-            this.result = null
-            this.$store.commit('clearAll')
-            break;
-        }
-      }
-      else this.input[this.input.length - 1] += String(value)
-
+      if (typeof value === 'number') this.handleNumber(value)
+      else if (this.isOperator(value)) this.handleOperator(value)
+      else if (typeof value === 'string') this.handleSpecialButton(value)
+      else alert("Something went wrong")
     },
     multiply (number1, number2) {
       return number1 * number2
@@ -76,9 +44,62 @@ export default {
       }
       return number1/number2;
     },
+    handleNumber(value) {
+      if (this.input.length === 0 || this.isOperator(this.lastElement)) {
+        if (this.lastElement === "-" && this.input.length === 1) this.input[this.lastIndex] += value
+        else this.input.push(value)
+      }
+      else this.input[this.input.length - 1] += String(value)
+    },
+    handleOperator(value) {
+      if (!this.isOperator(this.lastElement)){
+        if (this.result !== null && this.input.length === 0) {
+          this.input.push(this.result)
+          this.input.push(value)
+        } else if (this.input.length !== 0) {
+          this.input.push(value)
+        } else if (value === "-"){
+          this.input.push(value)
+        }
+      }
+    },
+    handleSpecialButton(value) {
+      switch (value) {
+        case 'ans':
+          this.ansButton()
+          break;
+        case '.':
+          this.decimalButton(value)
+          break;
+        case 'del':
+          let nextValue = this.lastElement !== undefined ? String(this.input.pop()) : "";
+          if (nextValue.length > 1) this.input.push(nextValue.substring(0, nextValue.length - 1))
+          break;
+        case 'c':
+          this.input = []
+          break;
+        case 'ac':
+          this.input = []
+          this.result = null
+          this.$store.commit('clearAll')
+          break;
+      }
+    },
+    ansButton() {
+      if (this.result !== null &&
+          (this.isOperator(this.lastElement)|| this.input.length === 0)) {
+        this.input.push(this.result)
+      }
+      else alert("Invalid use of ans button!")
+    },
+    decimalButton(value) {
+      if (String(this.lastElement).indexOf(value) !== -1
+          || this.isOperator(this.lastElement)) alert("Invalid operation")
+      else this.input[this.input.length - 1] += '.'
+    },
     //This method could use the Reverse Polish Notation in order to perform the necessary operations.
     calculate() {
-      if (this.operators[this.input[this.input.length - 1]] !== undefined || this.input.length < 3) {
+      if (this.isOperator(this.input[this.input.length - 1]) || this.input.length < 3) {
         alert("Invalid Calculation")
         return
       }
@@ -91,7 +112,6 @@ export default {
         let operator = this.input[i + 1];
         initVal = this.operators[operator](num1, num2);
         num1 = initVal
-        console.log(initVal)
       }
       this.result = initVal;
 
@@ -105,6 +125,9 @@ export default {
       this.$store.commit('addEntry', entry)
 
       this.input = []
+    },
+    isOperator(operator) {
+      return this.operators[operator] !== undefined
     }
   },
   computed: {
@@ -112,6 +135,12 @@ export default {
       let calc = "";
       this.input.forEach(symbol => calc += symbol + " ");
       return calc
+    },
+    lastIndex() {
+      return this.input.length - 1
+    },
+    lastElement() {
+      return this.input[this.lastIndex]
     }
   }
 }
@@ -126,7 +155,9 @@ export default {
   background-color: gray;
   padding: 10px 10px;
   border-radius: 5%;
-  max-width: 300px;
+  max-width: 500px;
+  min-width: 300px;
+  margin: 10px auto;
 }
 .buttons {
   display: grid;
@@ -152,7 +183,7 @@ button:hover {
 .calculator .screen {
   resize: none;
   outline: none;
-  background-color: white;
+  background-color: #9be7ff;
   color: black;
   border-radius: 10%;
   text-align: left;
