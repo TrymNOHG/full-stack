@@ -4,6 +4,10 @@ export default createStore({
   state: {
     logs: {
       logEntries: []
+    },
+    feedbackInfo: {
+      name: '',
+      email: ''
     }
   },
   getters: {
@@ -17,6 +21,12 @@ export default createStore({
     },
     clearAll(state) {
       state.logs.logEntries = []
+    },
+    updateName(state, name) {
+      state.feedbackInfo.name = name
+    },
+    updateEmail(state, email) {
+      state.feedbackInfo.email = email
     }
   },
   actions: {

@@ -34,6 +34,7 @@ export default {
     height: 300px;
     overflow: scroll;
     resize: none;
+    border: 5px solid gray;
   }
   p {
     color: #96a1ff;
