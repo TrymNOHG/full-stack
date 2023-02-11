@@ -1,16 +1,28 @@
 <template>
-  <label  v-bind="$attrs">{{ label }}</label>
+  <label :for="uuid" v-bind="$attrs" v-if="label">{{ label }}</label>
   <input
       v-bind="$attrs"
       :placeholder="label"
       class="field"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
+      :id="uuid"
+      :aria-describedby="error ? `${uuid}-error}` : null"
+      :aria-invalid="error ? true : null"
   >
+  <BaseErrorMessage
+      v-if="error"
+      :id="`${uuid}-error`"
+  >
+    {{ error }}
+  </BaseErrorMessage>
 </template>
 
 <script>
+import UniqueID from '@/features/UniqueID'
+import BaseErrorMessage from "@/components/Forms/BaseErrorMessage.vue";
 export default {
+  components: {BaseErrorMessage},
   props: {
     label: {
       type: String,
@@ -19,12 +31,27 @@ export default {
     modelValue: {
       type: [String, Number],
       default: ''
+    },
+    error: {
+      type: String,
+      default: ''
+    }
+  },
+  setup () {
+    const uuid = UniqueID().getID()
+    return {
+      uuid
     }
   }
+
 }
 </script>
 
 <style scoped>
+input {
+  border-radius: 5px;
+}
+
 label {
   color: white;
 }
@@ -39,5 +66,9 @@ textarea {
   min-width: 300px;
   alignment: center;
   margin: 10px auto;
+}
+
+.errorMessage {
+  color: red;
 }
 </style>

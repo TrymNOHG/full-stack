@@ -120,8 +120,6 @@ export default {
         result: this.result
       }
 
-      // this.$emit('completed-entry', entry)
-      // this.$store.dispatch('addEntry', entry)
       this.$store.commit('addEntry', entry)
 
       this.input = []
