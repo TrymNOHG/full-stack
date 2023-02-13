@@ -120,7 +120,7 @@ export default {
         result: this.result
       }
 
-      this.$store.commit('addEntry', entry)
+      this.$store.commit('ADD_ENTRY', entry)
 
       this.input = []
     },

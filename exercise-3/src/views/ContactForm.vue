@@ -1,32 +1,33 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit="submit">
     <fieldset class="contact-form">
       <legend><h1>We would love to hear your feedback on the calculator!</h1></legend>
       <BaseInput
-          v-model="feedback.name"
+          v-model="name"
           label="Name:"
           type="text"
           id="name-field"
-          :error="nameError"
-          required
+          :error="errors.name"
+          :options="feedbackInfo"
       />
 
       <BaseInput
-          v-model="feedback.email"
           label="Email:"
-          type="text"
+          type="email"
           class="email"
-          :error="emailError"
-          required
+          :model-value="email"
+          :error="errors.email"
+          :options="feedbackInfo"
+          @change="handleChange"
       />
 
       <BaseInput
-          v-model="feedback.message"
+          v-model="feedback"
           label="Feedback:"
           type="textarea"
           id="feedback"
-          error="This input has an error!"
-          required
+          :error="errors.feedback"
+          :options="feedbackInfo"
       />
     </fieldset>
 
@@ -37,49 +38,20 @@
 
 <script>
 import BaseInput from "@/components/Forms/BaseInput.vue";
-import axios from 'axios';
 import { useField, useForm } from 'vee-validate';
+import { useStore } from 'vuex';
 
 export default {
   name: "ContactForm",
   components: {BaseInput},
   data() {
     return {
-      feedback: {
-        name: this.$store.state.feedbackInfo.name,
-        email: this.$store.state.feedbackInfo.email,
-        message: ''
-      }
-    }
-  },
-  methods: {
-    onSubmit() {
-      if (this.feedback.name.trim() === '' || this.feedback.email.trim() === '' || this.feedback.message.trim() === '') {
-        alert("There can be no blank fields. Please fill out every field.")
-        return;
-      }
-
-      this.$store.commit('updateName', this.feedback.name);
-      this.$store.commit('updateEmail', this.feedback.email);
-
-      axios.post(
-          'https://my-json-server.typicode.com/TrymNOHG/full-stack/feedback',
-          this.feedback
-      ).then(function(response) {
-        console.log('Response', response)
-      }).catch(function(err) {
-        console.log('Error', err)
-      })
-
-      this.feedback.message = '';
-    }
-  },
-  computed: {
-    pastName() {
-      return this.$store.state.feedbackInfo.name
-    },
-    pastEmail() {
-      return this.$store.state.feedbackInfo.email
+      //TODO: Implement these again so they are automatically in the input fields if typed in before.
+      feedbackInfo: [
+          'name',
+          'email',
+          'message'
+      ]
     }
   },
   setup() {
@@ -88,8 +60,9 @@ export default {
       name: value => {
         if (!value) return 'This field is required'
 
-        const nameRegex = /^[a-zA-Z]$/
-        if(!nameRegex.text(String(value).toLowerCase())) {
+        //TODO: fix this regex
+        const nameRegex = /[a-zA-Z]/
+        if(!nameRegex.test(String(value).toLowerCase())) {
           return 'Name is invalid. It cannot contain numbers or special characters.'
         }
 
@@ -99,7 +72,7 @@ export default {
       email: value => {
         if (!value) return 'This field is required';
 
-        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if (!emailRegex.test(String(value).toLowerCase())) {
           return 'Email address is invalid!'
         }
@@ -107,26 +80,43 @@ export default {
         return true
       },
 
-      feedback: value => !value ? 'A feedback message has to be entered.' : true
+      feedback: value => !value.trim() ? 'A feedback message has to be entered.' : true
 
     }
 
-    useForm({
-      validationSchema: validations
+    const store = useStore()
+
+    const { handleSubmit, errors } = useForm({
+      validationSchema: validations,
+      initialValues: {
+        name: store.state.feedbackInfo.name,
+        email: store.state.feedbackInfo.email,
+        feedback: ''
+      }
     })
 
-    const { value: name, errorMessage: nameError} = useField('name')
-    const { value: email, errorMessage: emailError} = useField('email')
-    const { value: feedback, errorMessage: feedbackError} = useField('email')
+    const { value: name} = useField('name')
+    const { value: email, handleChange} = useField('email')
+    const { value: feedback} = useField('feedback')
 
+    const submit = handleSubmit(values => {
+
+      store.dispatch('createFeedback', values)
+
+      //TODO: check if this works
+      // FeedbackService.postFeedback(values)
+
+      values.feedback = '';
+
+    })
 
     return {
+      submit,
       name,
-      nameError,
       email,
-      emailError,
       feedback,
-      feedbackError
+      errors,
+      handleChange
     }
   }
 }
