@@ -2,7 +2,6 @@
   <div class="calculator">
     <div class="screen"> {{ this.calculation }} </div>
     <div class="buttons">
-<!--      Maybe add clear or back button?-->
       <button v-for="button in buttons" @click="add_input(button)">{{ button }}</button>
       <button @click="calculate" class="enterButton">Enter</button>
     </div>
