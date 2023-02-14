@@ -1,6 +1,6 @@
 <template>
   <div class="calculator">
-    <div class="screen"> {{ this.calculation }} </div>
+    <div class="screen" data-testid="calc-screen"> {{ this.calculation }} </div>
     <div class="buttons">
       <button v-for="button in buttons" @click="add_input(button)">{{ button }}</button>
       <button @click="calculate" class="enterButton">Enter</button>

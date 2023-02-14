@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import axios from "axios";
+import FeedbackService from "@/services/FeedbackService";
 
 export default createStore({
   state: {
@@ -30,10 +30,13 @@ export default createStore({
   },
   actions: {
     createFeedback({ commit }, feedback) {
-      axios.post(
-          'https://my-json-server.typicode.com/TrymNOHG/full-stack/feedback',
-          feedback
-      ).then(function(response) {
+
+      // axios.post(
+      //     'https://my-json-server.typicode.com/TrymNOHG/full-stack/feedback',
+      //     feedback
+      // )
+      FeedbackService.postFeedback(feedback)
+      .then(function(response) {
         console.log('Response', response)
         const person = {
           name: feedback.name,

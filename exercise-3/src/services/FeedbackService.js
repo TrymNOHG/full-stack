@@ -11,9 +11,9 @@ const apiClient = axios.create({
 
 export default {
     getFeedback() {
-        return apiClient.get('/contact')
+        return apiClient.get('/feedback')
     },
     postFeedback(feedback) {
-        return apiClient.post('/contact', feedback)
+        return apiClient.post('/feedback', feedback)
     }
 }

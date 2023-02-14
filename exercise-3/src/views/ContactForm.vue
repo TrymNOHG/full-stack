@@ -46,7 +46,6 @@ export default {
   components: {BaseInput},
   data() {
     return {
-      //TODO: Implement these again so they are automatically in the input fields if typed in before.
       feedbackInfo: [
           'name',
           'email',
@@ -102,9 +101,6 @@ export default {
     const submit = handleSubmit(values => {
 
       store.dispatch('createFeedback', values)
-
-      //TODO: check if this works
-      // FeedbackService.postFeedback(values)
 
       values.feedback = '';
 
