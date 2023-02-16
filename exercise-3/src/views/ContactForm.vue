@@ -9,15 +9,18 @@
           id="name-field"
           :error="errors.name"
           :options="feedbackInfo"
+          data-testid="name-field"
       />
 
       <BaseInput
           label="Email:"
           type="email"
           class="email"
+          id="email"
           :model-value="email"
           :error="errors.email"
           :options="feedbackInfo"
+          data-testid="email-field"
           @change="handleChange"
       />
 
@@ -28,6 +31,7 @@
           id="feedback"
           :error="errors.feedback"
           :options="feedbackInfo"
+          data-testid="feedback-field"
       />
     </fieldset>
 
