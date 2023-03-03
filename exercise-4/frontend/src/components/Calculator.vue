@@ -105,9 +105,7 @@ export default {
       }
 
       const expression = {
-        "num1": this.input[0],
-        "operator": this.input[1],
-        "num2": this.input[2]
+        "elements": this.input
       }
 
       await CalculationService.postFeedback(expression).then(response => {
